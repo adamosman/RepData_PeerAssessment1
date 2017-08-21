@@ -43,7 +43,7 @@ Example of the formatted data:
 head(day.steps)
 ```
 Then the data is displayed via the following histogram:
-```{r histogram 1}
+```{r histogram 1, echo=TRUE}
 # Computes the histogram
 hist(day.steps$steps,
      breaks = seq(from = 0, to = 25000, by = 2500),

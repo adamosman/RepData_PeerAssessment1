@@ -66,7 +66,7 @@ hist(day.steps$steps,
      main = "Total Number of Steps with NA's Removed")
 ```
 
-![](PA1_template_files/figure-html/histogram 1-1.png)<!-- -->
+![](PA1_template_files/figure-html/histogram 1-1.png)
 
 ```r
 step.mean <- floor(mean(day.steps$steps))
