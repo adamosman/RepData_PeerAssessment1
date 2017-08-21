@@ -109,7 +109,7 @@ plot(int.steps$interval,
      main = "Average Number of Steps for 5 Minute Intervals")
 ```
 
-![](PA1_template_files/figure-html/line plot-1.png)<!-- -->
+![](PA1_template_files/figure-html/line.plot-1-1.png)<!-- -->
 
 The interval at which the max number of steps occurs at is calulated from the following:
 
@@ -163,7 +163,7 @@ hist(day.steps.fill$steps,
      main = "Total Number of Steps with NA's filled")
 ```
 
-![](PA1_template_files/figure-html/histogram 2-1.png)<!-- -->
+![](PA1_template_files/figure-html/histogram-2-1.png)<!-- -->
 
 The new mean and median are calculated:
 
@@ -229,4 +229,4 @@ xyplot(mean ~ interval | day.type, day.type.steps,
        layout = c(1,2))
 ```
 
-![](PA1_template_files/figure-html/lattice plot-1.png)<!-- -->
+![](PA1_template_files/figure-html/line.plot-2-1.png)<!-- -->

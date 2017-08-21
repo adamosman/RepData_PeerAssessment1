@@ -74,7 +74,7 @@ Example of the formatted data:
 head(int.steps)
 ```
 Plots the data in a line graph:
-```{r line plot}
+```{r line.plot-1}
 plot(int.steps$interval,
      int.steps$mean,
      type = "l",
@@ -122,7 +122,7 @@ names(day.steps.fill) <- c("date", "steps")
 ```
 
 Then the data is displayed via the following histogram:
-```{r histogram 2}
+```{r histogram-2}
 # Computes the histogram 
 hist(day.steps.fill$steps,
      breaks = seq(from = 0, to = 25000, by = 2500),
@@ -172,7 +172,7 @@ head(day.type.steps, n=7)
 ```
 
 Plots the steps taken for each interval grouped by data from the weekend and during weekdays:
-```{r lattice plot}
+```{r line.plot-2}
 # Loads the lattice library
 library(lattice)
 
