@@ -1,12 +1,8 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 ## 1. Loading and preprocessing the data
 The workspace is cleared and the data is loaded from the CSV file:      
-```{r loading data}
+
+```r
 # Clears the workspace of any existing variables 
 rm(list=ls())
 
@@ -17,7 +13,8 @@ setwd("~/Desktop/Coursera/RepData_PeerAssessment1/")
 activity <- read.csv("activity.csv", stringsAsFactors = FALSE)
 ```
 Some minor formatting is done to the data frame:
-```{r formatting data}
+
+```r
 # Changes the dates to date classes and rearranges the columns of the data frame
 activity$date <- as.POSIXct(activity$date, format = "%Y-%m-%d")
 activity <- data.frame(date = activity$date,
@@ -25,12 +22,20 @@ activity <- data.frame(date = activity$date,
                        steps = activity$steps)
 ```
 Example of the formatted data frame:
-```{r example data, echo=FALSE}
-head(activity)
+
+```
+##         date interval steps
+## 1 2012-10-01        0    NA
+## 2 2012-10-01        5    NA
+## 3 2012-10-01       10    NA
+## 4 2012-10-01       15    NA
+## 5 2012-10-01       20    NA
+## 6 2012-10-01       25    NA
 ```
 ## 2. What is mean total number of steps taken per day?
 First the total number of steps taken each day is calculated from the following:
-```{r }
+
+```r
 # Groups the steps taken from each day and calculates the total. The NA's are removed from the calculations
 day.steps <- aggregate(activity$steps,
                        by = list(activity$date),
@@ -39,11 +44,19 @@ day.steps <- aggregate(activity$steps,
 names(day.steps) <- c("date", "steps")
 ```
 Example of the formatted data:
-```{r, echo=FALSE}
-head(day.steps)
+
+```
+##         date steps
+## 1 2012-10-01     0
+## 2 2012-10-02   126
+## 3 2012-10-03 11352
+## 4 2012-10-04 12116
+## 5 2012-10-05 13294
+## 6 2012-10-06 15420
 ```
 Then the data is displayed via the following histogram:
-```{r histogram 1}
+
+```r
 # Computes the histogram
 hist(day.steps$steps,
      breaks = seq(from = 0, to = 25000, by = 2500),
@@ -52,15 +65,19 @@ hist(day.steps$steps,
      xlab = "Number of Steps",
      main = "Total Number of Steps with NA's Removed")
 ```
-```{r mean and median 1}
+
+![](PA1_template_files/figure-html/histogram 1-1.png)<!-- -->
+
+```r
 step.mean <- floor(mean(day.steps$steps))
 step.median <- median(day.steps$steps)
 ```
-The mean is **`r step.mean`** and the median is **`r step.median`**
+The mean is **9354** and the median is **10395**
 
 ## 3. What is the average daily activity pattern?
 The average number of steps per interval is calculated:
-```{r}
+
+```r
 # The steps per interval are gathered and the mean for each interval is calculated
 int.steps <- aggregate(activity$steps,
                        by = list(activity$interval),
@@ -70,11 +87,19 @@ int.steps <- aggregate(activity$steps,
 names(int.steps) <- c("interval", "mean")
 ```
 Example of the formatted data:
-```{r, echo=FALSE}
-head(int.steps)
+
+```
+##   interval      mean
+## 1        0 1.7169811
+## 2        5 0.3396226
+## 3       10 0.1320755
+## 4       15 0.1509434
+## 5       20 0.0754717
+## 6       25 2.0943396
 ```
 Plots the data in a line graph:
-```{r line plot}
+
+```r
 plot(int.steps$interval,
      int.steps$mean,
      type = "l",
@@ -84,22 +109,27 @@ plot(int.steps$interval,
      main = "Average Number of Steps for 5 Minute Intervals")
 ```
 
+![](PA1_template_files/figure-html/line plot-1.png)<!-- -->
+
 The interval at which the max number of steps occurs at is calulated from the following:
-```{r}
+
+```r
 max.int.pos <- which(int.steps$mean == max(int.steps$mean))
 max.int <- int.steps[max.int.pos,1]
 ```
-Interval **`r max.int`** has the max number of steps.
+Interval **835** has the max number of steps.
 
 ## 4. Imputing missing values
 The total number of NA's in the dataset is calculated from the following:
-```{r, results='asis'}
+
+```r
 na.count <- sum(is.na(activity$steps))
 ```
-The total NA count is **`r na.count`**.
+The total NA count is **2304**.
 
 In order to fill in the missing data from the dataset, the average of each of the 5 minute intervals are assigned to any interval that is missing data:
-```{r Imputting the data}
+
+```r
 # Finds the indicies of the NA's in the dataset
 na.ind <- which(is.na(activity$steps))
 
@@ -122,7 +152,8 @@ names(day.steps.fill) <- c("date", "steps")
 ```
 
 Then the data is displayed via the following histogram:
-```{r histogram 2}
+
+```r
 # Computes the histogram 
 hist(day.steps.fill$steps,
      breaks = seq(from = 0, to = 25000, by = 2500),
@@ -132,19 +163,23 @@ hist(day.steps.fill$steps,
      main = "Total Number of Steps with NA's filled")
 ```
 
+![](PA1_template_files/figure-html/histogram 2-1.png)<!-- -->
+
 The new mean and median are calculated:
-```{r mean and median 2}
+
+```r
 step.mean.fill <- floor(mean(day.steps.fill$steps))
 step.median.fill <- floor(median(day.steps.fill$steps))
 ```
-The new mean and median are **`r format(step.mean.fill, scientific = FALSE)`** and **`r format(step.median.fill, scientific = FALSE)`** respectively. 
+The new mean and median are **10766** and **10766** respectively. 
 
 As you can see, the new mean and median have changed when compared to the values computed from the dataset that exluded the NA values. Both the mean and median have increased after the NA values were imputted. 
 
 ## 5. Are there differences in activity patterns between weekdays and weekends?
 
 The dataset with filled NA values is further categorized based on whether the day of the week is a weekday or the weekend.
-```{r}
+
+```r
 # A new column is added to the dataset that defines the day of the week with each entry is associated 
 activity.fill$weekday <- weekdays(activity$date)
 
@@ -167,12 +202,21 @@ names(day.type.steps) <- c("weekday","day.type","interval","mean")
 ```
 
 Example of the calculated dataset:
-```{r, echo=FALSE}
-head(day.type.steps, n=7)
+
+```
+##     weekday day.type interval      mean
+## 1    Friday  Weekday        0 0.3815514
+## 2    Monday  Weekday        0 1.4926625
+## 3  Thursday  Weekday        0 5.4129979
+## 4   Tuesday  Weekday        0 0.0000000
+## 5 Wednesday  Weekday        0 3.9685535
+## 6  Saturday  Weekend        0 0.2146226
+## 7    Sunday  Weekend        0 0.2146226
 ```
 
 Plots the steps taken for each interval grouped by data from the weekend and during weekdays:
-```{r lattice plot}
+
+```r
 # Loads the lattice library
 library(lattice)
 
@@ -184,3 +228,5 @@ xyplot(mean ~ interval | day.type, day.type.steps,
        main = "Number of Steps for Weekdays and Weekend Intervals",
        layout = c(1,2))
 ```
+
+![](PA1_template_files/figure-html/lattice plot-1.png)<!-- -->
